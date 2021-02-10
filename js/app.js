@@ -13,7 +13,7 @@ const validarNome = (input) => {
     input.value = formatarTextoApenasLetrasComAcentos(input.value);
 };
 
-const ativarBotaoItemQuantidade = (casas) => {
+const ativarBotaoItemQuantidade = () => {
     inputItemQuantidade.removeAttribute("disabled");
 };
 
@@ -72,25 +72,95 @@ const carregarUnidadeDeMedida = ({ value }) => {
     resetValorQuantidadeDoItem();
 };
 
-const formatarCampoMonetario = (input) => {
-    const valorInicial = "0,00";
+const formatarCampoMonetario = (
+    input,
+    separadorMilesimo,
+    separadorDecimal,
+    evento
+) => {
+    let teclaPressionada = "",
+        contagem = 0,
+        inputTamanho = 0,
+        separadorAuxiliar = "",
+        valorReverso = "",
+        teclaPressionadaKeyCode = window.Event ? evento.which : evento.keyCode;
 
-    var valor = input.value;
+    //Caso seja a tecla de backspace ou enter, não faz nada além de apagar o input
+    if (13 === teclaPressionadaKeyCode || 8 === teclaPressionadaKeyCode)
+        return !0;
 
-    // if (input.value === valorInicial) return;
+    // console.log(String.fromCharCode(teclaPressionadaKeyCode)); //retorna uma string a partir do código da tecla pressionada
+    // console.log(
+    //     "0123456789".indexOf(String.fromCharCode(teclaPressionadaKeyCode))
+    // ); //confere se o que foi pressionado é um numero
+    //se não for, não realiza nenhum alteração
 
-    const regexApenasLetrasEComAcentos = new RegExp("[^A-Za-zÀ-ÖØ-öø-ÿ]", "g");
+    //((CHECA SE A TECLA PRESSIONADA NÃO É UM NÚMERO))
+    if (
+        ((teclaPressionada = String.fromCharCode(teclaPressionadaKeyCode)),
+        -1 === "0123456789".indexOf(teclaPressionada))
+    )
+        return !1;
 
-    valor = valor + "";
-    valor = parseInt(valor.replace(/[\D]+/g, ""));
-    valor = valor + "";
-    valor = valor.replace(/([0-9]{2})$/g, ",$1");
+    for (
+        inputTamanho = input.value.length, contagem = 0;
+        contagem < inputTamanho &&
+        ("0" === input.value.charAt(contagem) ||
+            input.value.charAt(contagem) === separadorDecimal);
+        contagem++
+    );
 
-    if (valor.length > 6) {
-        //FORMATAR PARA MILHAR E CENTAVOS
-        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    for (separadorAuxiliar = ""; contagem < inputTamanho; contagem++)
+        -1 != "0123456789".indexOf(input.value.charAt(contagem)) &&
+            (separadorAuxiliar += input.value.charAt(contagem));
+
+    if (
+        ((separadorAuxiliar += teclaPressionada),
+        0 === (inputTamanho = separadorAuxiliar.length) && (input.value = ""),
+        1 === inputTamanho &&
+            (input.value = "0" + separadorDecimal + "0" + separadorAuxiliar),
+        2 === inputTamanho &&
+            (input.value = "0" + separadorDecimal + separadorAuxiliar),
+        inputTamanho > 2)
+    ) {
+        for (
+            valorReverso = "", j = 0, contagem = inputTamanho - 3;
+            contagem >= 0;
+            contagem--
+        ) {
+            3 === j && ((valorReverso += separadorMilesimo), (j = 0)),
+                (valorReverso += separadorAuxiliar.charAt(contagem)),
+                j++;
+        }
+
+        for (
+            input.value = "", contagem = valorReverso.length - 1;
+            contagem >= 0;
+            contagem--
+        ) {
+            input.value += valorReverso.charAt(contagem);
+        }
+
+        input.value +=
+            separadorDecimal +
+            separadorAuxiliar.substr(inputTamanho - 2, inputTamanho);
     }
 
-    input.value = valor;
-    if (valor == "NaN") input.value = "0,00";
+    return !1;
+
+    //bug se tentar alterar numero no inicio, está inserindo no final
 };
+
+const handleSubmit = (evento) => {
+    console.log("HANDLE");
+    evento.preventDefault();
+};
+
+// $(document).ready(function () {
+// $("#preco").on("change", function () {
+// console.log("CALL");
+// $("#preco").mask("#.##0,00", { reverse: true });
+// });
+// });
+
+// console.log("LOAD");
