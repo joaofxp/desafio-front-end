@@ -1,0 +1,29 @@
+{
+  "name": "desafio-front-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "balanced-match": "^1.0.0",
+    "brace-expansion": "^1.1.11",
+    "concat-map": "^0.0.1",
+    "core-util-is": "^1.0.2",
+    "date-now": "^0.1.4",
+    "jshint": "^2.12.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaofxp/desafio-front-end.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joaofxp/desafio-front-end/issues"
+  },
+  "homepage": "https://github.com/joaofxp/desafio-front-end#readme"
+}

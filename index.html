@@ -6,7 +6,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<title>Desafio Front-End TI</title>
+	<title>Desafio Front-End</title>
+
+	<!-- <link rel="stylesheet" href="./css/reset.css"> -->
+	<!-- <link rel="stylesheet" href="./css/style.css"> -->
 </head>
 
 <body>
@@ -24,20 +27,22 @@
 	<main>
 		<h3>Cadastro de item</h3>
 
+		<small>Campos marcados com asterisco (*) são obrigatórios.</small>
+		<br>
+		<br>
+
 		<form onSubmit="handleSubmit()">
 			<div>
-				<!-- <legend>Informações do Item</legend> -->
-				<label for="nomeDoItem">Nome</label>
+				<label for="nomeDoItem">Nome*</label>
 				<input type="text" id="nomeDoItem" placeholder="Grampeador" maxlength="50" onkeyup="validarNome(this)" required />
 			</div>
 
 			<div>
-				<label for="unidadeDeMedida">Unidade de medida</label>
+				<label for="unidadeDeMedida">Unidade de medida*</label>
 
-				<!-- REGRAS UNIDADE DE MEDIDA -->
-				<select id="unidadeDeMedida" onchange="carregarUnidadesDeMedida(this)" required>
+				<select id="unidadeDeMedida" onchange="carregarUnidadeDeMedida(this)" required>
 					<option value disabled selected hidden>
-						Selecione
+						Selecione*
 					</option>
 					<option value="litro">Litro</option>
 					<option value="quilograma">Quilograma</option>
@@ -47,14 +52,15 @@
 
 			<div>
 				<label for="itemQuantidade">Quantidade do item</label>
-				<input type="number" id="itemQuantidade" disabled required />
+				<input type="number" id="itemQuantidade" min="0" disabled />
 
-				<!-- VARIA CONFOREM A REGRA DA UNIDADE DE MEDIDA -->
+				<span id="itemQuantidadeAbreviatura"></span>
 			</div>
 
 			<div>
-				<label for="preco">Preço</label>
-				<input type="number" min="1" id="preco" step="0.01" required />
+				<label for="preco">Preço*</label>
+				<span>R$</span>
+				<input type="text" id="preco" onkeyup="formatarCampoMonetario(this)" value="0,00" required />
 			</div>
 
 			<div>
@@ -63,12 +69,11 @@
 			</div>
 			<div>
 				<label for="preco">Data de validade</label>
-
 				<input type="date" id="dataValidade" />
 			</div>
 			<div>
-				<label for="preco">Data de fabricação</label>
-				<input type="date" id="dataFabricacao" />
+				<label for="preco">Data de fabricação*</label>
+				<input type="date" id="dataFabricacao" required />
 			</div>
 
 			<button type="submit">Salvar</button>
