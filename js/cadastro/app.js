@@ -155,20 +155,27 @@ var urlParams = function (name) {
 };
 
 var verificarSeEUmaEdicao = function () {
-    var queryString = window.location.search;
-
-    if (urlParams("editarId")) {
+    if (urlParams("editarId") !== null) {
         if (!isNaN(urlParams("editarId")) && urlParams("editarId").length > 0) {
             var editarId = Number(urlParams("editarId"));
             itemSendoEditado = true;
+            console.log(editarId);
             carregarInformacoesDoId(editarId);
-        } else alert("ID INVÁLIDO");
+        } else {
+            alert("ID INVÁLIDO");
+            redirecionarParaListagem();
+        }
+    } else {
+        console.log("OUT");
     }
 };
 
 var carregarDadosDoItem = function (item) {
     var dataFabricacao = getValorDataFormatadoYYYYMMDD(item.dataFabricacao);
-    var dataValidade = getValorDataFormatadoYYYYMMDD(item.dataValidade);
+
+    var dataValidade = dataValida(new Date(item.dataValidade))
+        ? getValorDataFormatadoYYYYMMDD(item.dataValidade)
+        : "";
 
     carregarUnidadeDeMedida(item.unidadeDeMedida);
     ativarBotaoItemQuantidade();
@@ -189,6 +196,10 @@ var carregarDadosDoItem = function (item) {
     checarDataValidade(dataValidade);
 };
 
+var redirecionarParaListagem = function () {
+    location.href = "/";
+};
+
 var carregarInformacoesDoId = function (id) {
     var itens = getItensCadastrados();
 
@@ -207,7 +218,7 @@ var carregarInformacoesDoId = function (id) {
 
             if (!Boolean(Number(item.itemAtivo))) {
                 alert("Erro ao editar item, contate um administrador.");
-                location.href = "./listagem.html";
+                redirecionarParaListagem();
 
                 return;
             }
@@ -218,19 +229,34 @@ var carregarInformacoesDoId = function (id) {
 
     if (!sofreuAlteracao) {
         alert("ID Inválido");
-        // FAZ O REDIRECIONAMENTO PRA LISTAGEM
+        redirecionarParaListagem();
         return;
     }
 };
+
+function dataValida(data) {
+    return data instanceof Date && !isNaN(data);
+}
 
 var handleSubmit = function handleSubmit() {
     function salvarItensCadastrados(itens) {
         localStorage.setItem(localStorageItens, JSON.stringify(itens));
         console.log("ITENS ALTERADOS!");
-        location.href = "./listagem.html";
+        redirecionarParaListagem();
     }
 
     function criarItem(id) {
+        console.log(
+            dataValida(formatarInputData(getValorPorId("dataValidade")))
+        );
+        console.log(formatarInputData(getValorPorId("dataValidade")));
+
+        var dataValidade = dataValida(
+            formatarInputData(getValorPorId("dataValidade"))
+        )
+            ? formatarInputData(getValorPorId("dataValidade"))
+            : "";
+
         return {
             id: id,
             nomeDoItem: getValorPorId("nomeDoItem"),
@@ -238,7 +264,7 @@ var handleSubmit = function handleSubmit() {
             itemQuantidade: getValorPorId("itemQuantidade"),
             preco: getValorPorId("preco"),
             dataFabricacao: formatarInputData(getValorPorId("dataFabricacao")),
-            dataValidade: formatarInputData(getValorPorId("dataValidade")),
+            dataValidade: dataValidade,
             produtoPerecivel: getValorPorId("produtoPerecivel"),
             itemAtivo: "1",
         };
@@ -266,6 +292,7 @@ var handleSubmit = function handleSubmit() {
 
                 if (item.id === id) {
                     itens[contagem] = novoItem;
+                    console.log("ITEM EDITADO SALVO");
 
                     salvarItensCadastrados(itens);
                 }

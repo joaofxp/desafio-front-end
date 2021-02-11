@@ -1,0 +1,7 @@
+{
+    "jshint.options": {
+        "esversion": 5,
+        "laxbreak": true,
+        "-W030": true
+    }
+}

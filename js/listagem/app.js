@@ -48,8 +48,6 @@ var confirmarExclusao = function (id) {
                 var itemDesativado = item;
                 itemDesativado.itemAtivo = 0;
 
-                console.log("EXCLUIR", id);
-
                 itens[contagem] = itemDesativado;
 
                 salvarItensCadastrados(itens);
@@ -67,18 +65,37 @@ var confirmarExclusao = function (id) {
 };
 
 var criarNovaLinhaDaTabela = function (item) {
+    function removerTodosOsPontos(valor) {
+        return valor.replace(/\./g, "");
+    }
+
+    function substituirPontoPorVirgulaUmaUnicaVez(valor) {
+        return valor.replace(",", ".");
+    }
+
+    function formatarParaReal(valor) {
+        return Number(valor).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        });
+    }
+
     var precoFormatado = item.preco;
-    //Remover todos pontos
-    precoFormatado = precoFormatado.replace(/\./g, "");
-    //Só altera a ultima virgula para ponto, permitindo a formatação
-    precoFormatado = precoFormatado.replace(",", ".");
+    precoFormatado = removerTodosOsPontos(precoFormatado);
+    precoFormatado = substituirPontoPorVirgulaUmaUnicaVez(precoFormatado);
 
-    precoFormatado = Number(precoFormatado).toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-    });
+    precoFormatado = formatarParaReal(precoFormatado);
 
-    var urlEditar = "./cadastro?editarId=" + item.id;
+    var urlEditar = "./cadastro.html?editarId=" + item.id;
+
+    var dataFabricacao = getValorDataFormatadoDDMMYYYY(item.dataFabricacao);
+
+    var dataValidade =
+        item.dataValidade === null || item.dataValidade.length === 0
+            ? "Sem validade"
+            : getValorDataFormatadoDDMMYYYY(new Date(item.dataValidade));
+
+    var produtoPerecivel = item.produtoPerecivel ? "Sim" : "Não";
 
     return "".concat(
         "<tr>",
@@ -100,15 +117,15 @@ var criarNovaLinhaDaTabela = function (item) {
         "</td>",
 
         "<td>",
-        getValorDataFormatadoDDMMYYYY(item.dataFabricacao),
+        dataFabricacao,
         "</td>",
 
         "<td>",
-        getValorDataFormatadoDDMMYYYY(item.dataValidade),
+        dataValidade,
         "</td>",
 
         "<td>",
-        item.produtoPerecivel,
+        produtoPerecivel,
         "</td>",
 
         "<td>",
