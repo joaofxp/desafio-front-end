@@ -197,7 +197,7 @@ var carregarDadosDoItem = function (item) {
 };
 
 var redirecionarParaListagem = function () {
-    location.href = "/";
+    location.href = "./index.html";
 };
 
 var carregarInformacoesDoId = function (id) {
