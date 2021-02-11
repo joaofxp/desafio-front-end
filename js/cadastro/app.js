@@ -89,7 +89,7 @@ var setItemQuantidadeAbreviatura = function (texto) {
 };
 
 var resetValorQuantidadeDoItem = function () {
-    inputItemQuantidade.value = 0;
+    inputItemQuantidade.value = "";
 };
 
 var carregarUnidadeDeMedida = function (valor) {
@@ -205,6 +205,13 @@ var carregarInformacoesDoId = function (id) {
         if (item.id === id) {
             sofreuAlteracao = true;
 
+            if (!Boolean(Number(item.itemAtivo))) {
+                alert("Erro ao editar item, contate um administrador.");
+                location.href = "./listagem.html";
+
+                return;
+            }
+
             carregarDadosDoItem(item);
         }
     }
@@ -220,6 +227,7 @@ var handleSubmit = function handleSubmit() {
     function salvarItensCadastrados(itens) {
         localStorage.setItem(localStorageItens, JSON.stringify(itens));
         console.log("ITENS ALTERADOS!");
+        location.href = "./listagem.html";
     }
 
     function criarItem(id) {
@@ -260,9 +268,6 @@ var handleSubmit = function handleSubmit() {
                     itens[contagem] = novoItem;
 
                     salvarItensCadastrados(itens);
-
-                    console.log("ITEM ALTERADO!");
-                    location.reload();
                 }
             }
         } else {
