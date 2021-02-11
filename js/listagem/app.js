@@ -1,5 +1,16 @@
 // isola as funções de localstorage num arquivo só
 
+var unidadesDeMedidaEnum = Object.freeze({
+    LITRO: "litro",
+    QUILOGRAMA: "quilograma",
+    UNIDADE: "unidade",
+});
+var unidadesDeMedidaAbreviaturasEnum = Object.freeze({
+    LITRO: "lt",
+    QUILOGRAMA: "kg",
+    UNIDADE: "un",
+});
+
 var localStorageItens = "";
 
 var getItensCadastrados = function () {
@@ -13,11 +24,14 @@ var getElementoPorId = function (id) {
 var getValorDataFormatadoDDMMYYYY = function (data) {
     var dataParaFormatar = new Date(data);
 
+    var diaFormatado = dataParaFormatar.getDate();
+    diaFormatado = diaFormatado < 10 ? "0" + diaFormatado : diaFormatado;
+
     var mesFormatado = dataParaFormatar.getMonth() + 1;
     mesFormatado = mesFormatado < 10 ? "0" + mesFormatado : mesFormatado;
 
     var dataFormatada = "".concat(
-        dataParaFormatar.getDate(),
+        diaFormatado,
         "/",
         mesFormatado,
         "/",
@@ -88,7 +102,9 @@ var criarNovaLinhaDaTabela = function (item) {
 
     var urlEditar = "./cadastro.html?editarId=" + item.id;
 
-    var dataFabricacao = getValorDataFormatadoDDMMYYYY(item.dataFabricacao);
+    var dataFabricacao = getValorDataFormatadoDDMMYYYY(
+        new Date(item.dataFabricacao)
+    );
 
     var dataValidade =
         item.dataValidade === null || item.dataValidade.length === 0
@@ -96,6 +112,22 @@ var criarNovaLinhaDaTabela = function (item) {
             : getValorDataFormatadoDDMMYYYY(new Date(item.dataValidade));
 
     var produtoPerecivel = item.produtoPerecivel ? "Sim" : "Não";
+
+    var abreviatura = "";
+
+    switch (item.unidadeDeMedida) {
+        case unidadesDeMedidaEnum.LITRO:
+            abreviatura = unidadesDeMedidaAbreviaturasEnum.LITRO;
+            break;
+        case unidadesDeMedidaEnum.QUILOGRAMA:
+            abreviatura = unidadesDeMedidaAbreviaturasEnum.QUILOGRAMA;
+            break;
+        case unidadesDeMedidaEnum.UNIDADE:
+            abreviatura = unidadesDeMedidaAbreviaturasEnum.UNIDADE;
+            break;
+        default:
+            break;
+    }
 
     return "".concat(
         "<tr>",
@@ -105,39 +137,35 @@ var criarNovaLinhaDaTabela = function (item) {
         "</td>",
 
         "<td>",
-        item.unidadeDeMedida,
-        "</td>",
-
-        "<td>",
-        item.itemQuantidade,
-        "</td>",
-
-        "<td>",
-        precoFormatado,
-        "</td>",
-
-        "<td>",
-        dataFabricacao,
-        "</td>",
-
-        "<td>",
-        dataValidade,
-        "</td>",
-
-        "<td>",
         produtoPerecivel,
         "</td>",
 
-        "<td>",
+        "<td  class='text-right'>",
+        item.itemQuantidade + " " + abreviatura,
+        "</td>",
 
-        "<button onclick='confirmarExclusao(",
+        "<td  class='text-right'>",
+        precoFormatado,
+        "</td>",
+
+        "<td  class='text-right'>",
+        dataFabricacao,
+        "</td>",
+
+        "<td  class='text-right'>",
+        dataValidade,
+        "</td>",
+
+        "<td class='text-center'>",
+
+        "<button class='ml-auto btn btn-danger d-inline-block' onclick='confirmarExclusao(",
         item.id,
         ")'",
         ">",
         "Excluir",
         "</button>",
 
-        "<a href='",
+        "<a class='btn btn-warning d-inline-block ml-2' href='",
         urlEditar,
         "'>",
         "Editar",

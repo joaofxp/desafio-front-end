@@ -8,84 +8,105 @@
 
 	<title>Cadastro de itens</title>
 
-	<!-- <link rel="stylesheet" href="./css/reset.css"> -->
-	<!-- <link rel="stylesheet" href="./css/style.css"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous">
+
 </head>
 
-<body>
-	<nav>
-		<ul>
-			<li>
-				<a href="./cadastro.html">Cadastro de item</a>
-			</li>
-			<li>
-				<a href="/">Listagem de itens</a>
-			</li>
-		</ul>
-	</nav>
+<body class="container py-3 py-md-5">
+	<div class="row">
+		<div class="col-12 col-md-3">
+			<nav class="nav flex-column-md">
+				<a class="nav-link" href="./cadastro.html">Cadastro de itens</a>
+				<a class="nav-link active" href="/">Listagem de itens</a>
+			</nav>
 
-	<main>
-		<h3>
-			Cadastro de item
-		</h3>
+		</div>
+		<div class="col-12 col-md-9 pt-3 pt-md-0">
 
-		<small>Campos marcados com asterisco (*) são obrigatórios.</small>
-		<br />
-		<br />
+			<main>
+				<h3>
+					Cadastro de item
+				</h3>
 
-		<form>
-			<input type="hidden" id="edicaoId">
+				<small>Campos marcados com asterisco (*) são obrigatórios.</small>
+				<br />
+				<br />
 
-			<div>
-				<label for="nomeDoItem">Nome*</label>
-				<input type="text" id="nomeDoItem" placeholder="Grampeador" maxlength="50" onkeyup="validarNome(this)" required />
-			</div>
+				<form class="justify-content-center">
 
-			<div>
-				<label for="unidadeDeMedida">Unidade de medida*</label>
+					<div class="">
+						<input type="hidden" id="edicaoId">
 
-				<select id="unidadeDeMedida" onchange="carregarUnidadeDeMedida(this.value)" required>
-					<option value disabled selected hidden>
-						Selecione*
-					</option>
-					<option value="litro">Litro</option>
-					<option value="quilograma">Quilograma</option>
-					<option value="unidade">Unidade</option>
-				</select>
-			</div>
+						<div class="form-group">
+							<label for="nomeDoItem">Nome*</label>
+							<input class="form-control col-12 col-md-5" type="text" id="nomeDoItem" placeholder="Grampeador" maxlength="50" onkeyup="validarNome(this)" required />
+						</div>
 
-			<div>
-				<label for="itemQuantidade">Quantidade do item</label>
-				<input type="number" id="itemQuantidade" min="0" disabled />
+						<div class="form-group">
+							<label for="unidadeDeMedida">Unidade de medida*</label>
 
-				<span id="itemQuantidadeAbreviatura"></span>
-			</div>
+							<select class="form-control col-12 col-md-3" id="unidadeDeMedida" onchange="carregarUnidadeDeMedida(this.value)" required>
+								<option value disabled selected hidden>
+									Selecione*
+								</option>
+								<option value="litro">Litro</option>
+								<option value="quilograma">Quilograma</option>
+								<option value="unidade">Unidade</option>
+							</select>
+						</div>
 
-			<div>
-				<label for="preco">Preço*</label>
-				<span>R$</span>
-				<input type="text" id="preco" maxlength="15" onkeypress='formatarCampoMonetario()' required />
-			</div>
+						<label for="itemQuantidade">Quantidade do item</label>
 
-			<div>
-				<label for="preco">Produto perecível</label>
-				<input type="checkbox" id="produtoPerecivel" onchange="toggleDataValidadeObrigatoria()" />
-			</div>
-			<div>
-				<label for="preco">Data de fabricação*</label>
-				<input type="date" id="dataFabricacao" required />
-			</div>
-			<div>
-				<label for="preco" id="dataValidadeText">Data de validade</label>
-				<input type="date" id="dataValidade" onchange="checarDataValidade(this.value)" />
-			</div>
+						<div class="input-group mb-3">
+							<input class="form-control col-12 col-md-3" type="number" id="itemQuantidade" min="0" disabled />
+							<div class="input-group-append">
+								<span class="input-group-text" id="itemQuantidadeAbreviatura"></span>
+							</div>
+						</div>
 
-			<button type="submit">Salvar</button>
-			<a href="../" target="_parent">Cancelar</a>
-		</form>
-	</main>
+						<div class="form-group">
+							<label for="preco">Preço*</label>
+							<span>R$</span>
+							<input type="text" class="form-control col-12 col-md-2" id="preco" maxlength="15" onkeypress='formatarCampoMonetario()' required />
+						</div>
 
-	<script src="./js/jquery/jquery-3.5.1.min.js"></script>
+						<div class="form-check mb-3">
+							<input type="checkbox" class="form-check-input" id="produtoPerecivel" onchange="toggleDataValidadeObrigatoria()" />
+							<label class="form-check-label" for="produtoPerecivel">
+								Produto perecível
+							</label>
+						</div>
+
+						<div class="form-group">
+							<label for="preco" id="dataValidadeText">Data de validade</label>
+							<input type="date" class="form-control col-12 col-md-3" id="dataValidade" onchange="checarDataValidade(this.value)" />
+						</div>
+
+						<div class="form-group">
+							<label for="preco">Data de fabricação*</label>
+							<input type="date" class="form-control col-12 col-md-3" id="dataFabricacao" required />
+						</div>
+
+						<hr>
+
+						<div class="">
+							<button class="btn btn-success" type="submit">Salvar</button>
+							<a class="ml-3 btn btn-light" href="../" target="_parent">Cancelar</a>
+						</div>
+					</div>
+
+				</form>
+			</main>
+
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+	</script>
 	<script src="./js/jquery/jquery.mask.min.js"></script>
 
 	<script src="./js/cadastro/app.js"></script>
